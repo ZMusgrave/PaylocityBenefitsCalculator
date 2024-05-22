@@ -9,6 +9,16 @@ namespace Api.Controllers;
 [Route("api/v1/[controller]")]
 public class DependentsController : ControllerBase
 {
+    private readonly CompanyContext _context;
+
+    public DependentsController(CompanyContext context)
+    {
+        _context = context;
+
+        _context.Database.EnsureCreated();
+    }
+    
+    
     [SwaggerOperation(Summary = "Get dependent by id")]
     [HttpGet("{id}")]
     public async Task<ActionResult<ApiResponse<GetDependentDto>>> Get(int id)
