@@ -17,13 +17,20 @@ public class DependentsController : ControllerBase
 
         _context.Database.EnsureCreated();
     }
-    
+     
     
     [SwaggerOperation(Summary = "Get dependent by id")]
     [HttpGet("{id}")]
     public async Task<ActionResult<ApiResponse<GetDependentDto>>> Get(int id)
     {
-        throw new NotImplementedException();
+        var dependent = await _context.Dependents.FindAsync(id);
+
+        if (dependent == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(dependent);
     }
 
     [SwaggerOperation(Summary = "Get all dependents")]
