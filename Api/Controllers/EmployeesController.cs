@@ -113,4 +113,60 @@ public class EmployeesController : ControllerBase
 
         return result;
     }
+    
+    [SwaggerOperation(Summary = "Create a new employee")]
+    [HttpPost("")]
+    public async Task<ActionResult<ApiResponse<GetEmployeeDto>>> Post(Employee employee)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ApiResponse<GetDependentDto>
+                {
+                    Success = false,
+                    Error = $"{ModelState.IsValid}"
+                });
+            }
+
+            _context.Employees.Add(employee);
+            await _context.SaveChangesAsync();
+
+            var employeeDto = new GetEmployeeDto
+            {
+                Id = employee.Id,
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                Salary = employee.Salary,
+                DateOfBirth = employee.DateOfBirth,
+                Dependents = employee.Dependents.Select(d => new GetDependentDto
+                {
+                    Id = d.Id,
+                    FirstName = d.FirstName,
+                    LastName = d.LastName,
+                    DateOfBirth = d.DateOfBirth,
+                    Relationship = d.Relationship
+                }).ToList()
+            };
+            
+            var result = new ApiResponse<GetEmployeeDto>
+            {
+                Data = employeeDto,
+                Success = true
+            };
+
+            return Ok(result);
+            
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new ApiResponse<GetDependentDto>
+            {
+                Success = false,
+                //TODO come back to this spot and verify that this actually is useful
+                Error = ex.Message
+            });
+        }
+      
+    }
 }
