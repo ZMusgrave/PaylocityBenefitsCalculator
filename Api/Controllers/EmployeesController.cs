@@ -3,6 +3,7 @@ using Api.Dtos.Dependent;
 using Api.Dtos.Employee;
 using Api.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Api.Controllers;
@@ -25,14 +26,57 @@ public class EmployeesController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<ApiResponse<GetEmployeeDto>>> Get(int id)
     {
-        var employee = await _context.Employees.FindAsync(id);
-
-        if (employee == null)
+        try
         {
-            return NotFound();
-        }
+            var employee = await _context.Employees
+                .Include(e => e.Dependents)
+                .FirstOrDefaultAsync(e => e.Id == id);
 
-        return Ok(employee);
+            if (employee == null)
+            {
+                return NotFound(new ApiResponse<GetDependentDto>
+                {
+                    Success = false,
+                    Error = $"Dependent with ID {id} not found."
+                });
+            }
+            
+            var employeeDto = new GetEmployeeDto
+            {
+                Id = employee.Id,
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                Salary = employee.Salary,
+                DateOfBirth = employee.DateOfBirth,
+                Dependents = employee.Dependents.Select(d => new GetDependentDto
+                {
+                    Id = d.Id,
+                    FirstName = d.FirstName,
+                    LastName = d.LastName,
+                    DateOfBirth = d.DateOfBirth,
+                    Relationship = d.Relationship
+                }).ToList()
+            };
+            
+            var result = new ApiResponse<GetEmployeeDto>
+            {
+                Data = employeeDto,
+                Success = true
+            };
+
+            return Ok(result);
+            
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new ApiResponse<GetDependentDto>
+            {
+                Success = false,
+                //TODO come back to this spot and verify that this actually is useful
+                Error = ex.Message
+            });
+        }
+      
     }
 
     [SwaggerOperation(Summary = "Get all employees")]
