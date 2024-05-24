@@ -1,0 +1,78 @@
+using Api.Data;
+using Api.Dtos.Dependent;
+using Api.Dtos.Finance.Paycheck;
+using Api.Models;
+using Api.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Swashbuckle.AspNetCore.Annotations;
+
+namespace Api.Controllers;
+
+[ApiController]
+[Route("api/v1/[controller]")]
+public class PaychecksController : ControllerBase
+{
+    private readonly CompanyContext _context;
+    private readonly IPayCheckCalculator _payCheckCalculator;
+
+    public PaychecksController(CompanyContext context, IPayCheckCalculator payCheckCalculator)
+    {
+        _context = context;
+        _context.Database.EnsureCreated();
+        
+        _payCheckCalculator = payCheckCalculator;
+    }
+    
+    [SwaggerOperation(Summary = "Get paycheck by Employee Id")]
+    [HttpGet("{id}")]
+    public async Task<ActionResult<ApiResponse<GetPaycheckDto>>> Get(int id)
+    {
+        try
+        {
+            var employee = await _context.Employees
+                .Include(e => e.Dependents)
+                .FirstOrDefaultAsync(e => e.Id == id);
+            
+            if (employee == null)
+            {
+                return NotFound(new ApiResponse<GetPaycheckDto>
+                {
+                    Success = false,
+                    Error = $"Employee with ID {id} not found."
+                });
+            }
+           
+            var paycheckAmount = _payCheckCalculator.CalculatePaycheck(employee);
+            
+            var paycheckDto = new GetPaycheckDto()
+            {
+                Id = Guid.NewGuid().ToString(),
+                EmployeeId = employee.Id,
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                Salary = employee.Salary,
+                Net = paycheckAmount
+            };
+            
+            var result = new ApiResponse<GetPaycheckDto>
+            {
+                Data = paycheckDto,
+                Success = true
+            };
+
+            return Ok(result);
+            
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new ApiResponse<GetDependentDto>
+            {
+                Success = false,
+                //TODO come back to this spot and verify that this actually is useful
+                Error = ex.Message
+            });
+        }
+      
+    }
+}
