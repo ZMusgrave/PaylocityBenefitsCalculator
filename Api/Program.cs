@@ -1,4 +1,6 @@
-using Api.Models;
+using Api.Data;
+using Api.Services;
+using Api.Services.Interfaces;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,6 +26,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy(allowLocalhost,
         policy => { policy.WithOrigins("http://localhost:3000", "http://localhost"); });
 });
+
+builder.Services.AddScoped<IPayCheckCalculator, PayCheckService>();
 
 // Utilizing Entity Frameworks in memory package to provide a context for access data using good practices
 builder.Services.AddDbContext<CompanyContext>(options =>
