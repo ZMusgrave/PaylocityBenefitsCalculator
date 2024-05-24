@@ -25,6 +25,6 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Run
-      run: dotnet run --no-restore
+      run: dotnet run --project src/Api
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal --project src/ApiTests
