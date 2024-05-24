@@ -23,7 +23,7 @@ public class PaycheckCalculatorTest
                 new() { FirstName = "Bob", LastName = "Barron", DateOfBirth = new DateTime(1960, 1, 1) }
             }
         };
-        var paycheckCalculator = new PayCheckService();
+        var paycheckCalculator = new PaycheckService();
 
    
         var paycheck = paycheckCalculator.CalculatePaycheck(employee);

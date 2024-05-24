@@ -27,7 +27,7 @@ builder.Services.AddCors(options =>
         policy => { policy.WithOrigins("http://localhost:3000", "http://localhost"); });
 });
 
-builder.Services.AddScoped<IPayCheckCalculator, PayCheckService>();
+builder.Services.AddScoped<IPaycheckService, PaycheckService>();
 
 // Utilizing Entity Frameworks in memory package to provide a context for access data using good practices
 builder.Services.AddDbContext<CompanyContext>(options =>

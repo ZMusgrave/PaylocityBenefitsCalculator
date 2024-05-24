@@ -4,7 +4,7 @@ using Api.Services.Interfaces;
 
 namespace Api.Services;
 
-public class PayCheckService : IPayCheckCalculator
+public class PaycheckService : IPaycheckService
 {
     private const int PaychecksPerYear = 26;
     private const decimal BaseBenefitsCostPerMonth = 1000;

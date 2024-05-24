@@ -14,14 +14,14 @@ namespace Api.Controllers;
 public class PaychecksController : ControllerBase
 {
     private readonly CompanyContext _context;
-    private readonly IPayCheckCalculator _payCheckCalculator;
+    private readonly IPaycheckService _paycheckService;
 
-    public PaychecksController(CompanyContext context, IPayCheckCalculator payCheckCalculator)
+    public PaychecksController(CompanyContext context, IPaycheckService paycheckService)
     {
         _context = context;
         _context.Database.EnsureCreated();
         
-        _payCheckCalculator = payCheckCalculator;
+        _paycheckService = paycheckService;
     }
     
     [SwaggerOperation(Summary = "Get paycheck by Employee Id")]
@@ -43,7 +43,7 @@ public class PaychecksController : ControllerBase
                 });
             }
            
-            var paycheck = _payCheckCalculator.CalculatePaycheck(employee);
+            var paycheck = _paycheckService.CalculatePaycheck(employee);
             
             var result = new ApiResponse<GetPaycheckDto>
             {

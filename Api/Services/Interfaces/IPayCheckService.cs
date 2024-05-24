@@ -3,7 +3,7 @@ using Api.Models;
 
 namespace Api.Services.Interfaces;
 
-public interface IPayCheckCalculator
+public interface IPaycheckService
 {
         GetPaycheckDto CalculatePaycheck(Employee employee);
 }
