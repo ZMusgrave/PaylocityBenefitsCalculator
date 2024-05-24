@@ -30,7 +30,6 @@ public static class ModelBuilderExtension
                 LastName = "Jordan",
                 Salary = 143211.12m,
                 DateOfBirth = new DateTime(1963, 2, 17),
-                
             }
         );
 
