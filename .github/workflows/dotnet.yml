@@ -30,10 +30,10 @@ jobs:
     - name: Wait for API to start
       run: |
         sleep 3
+    - name: Add Dev Https Certs
+      run: dotnet dev-certs --trust
         
     - name: Run Tests
-      env:
-        DOTNET_SSL_VALIDATION: false
       run: dotnet test --no-build --verbosity normal
       
     - name: Kill API process
