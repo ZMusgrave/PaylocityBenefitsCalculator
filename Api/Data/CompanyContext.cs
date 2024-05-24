@@ -1,5 +1,6 @@
+using Api.Models;
 using Microsoft.EntityFrameworkCore;
-namespace Api.Models;
+namespace Api.Data;
 
 public class CompanyContext : DbContext
 {

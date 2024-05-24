@@ -68,8 +68,8 @@ public static class ModelBuilderExtension
                 Id = 4,
                 FirstName = "DP",
                 LastName = "Jordan",
-                Relationship = Relationship.DomesticPartner,
-                DateOfBirth = new DateTime(1974, 1, 2),
+                Relationship = Relationship.Child,
+                DateOfBirth = new DateTime(1994, 1, 2),
                 EmployeeId = 3
             }
         );

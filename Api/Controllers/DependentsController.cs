@@ -1,8 +1,8 @@
-﻿using Api.Dtos.Dependent;
+﻿using Api.Data;
+using Api.Dtos.Dependent;
 using Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Api.Controllers;
