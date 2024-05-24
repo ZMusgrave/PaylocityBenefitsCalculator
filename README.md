@@ -1,11 +1,11 @@
 # Employee Paycheck Calculation API
 
 ## Project Overview
-This project is an API for managing employees and their dependents, and for calculating their monthly paycheck. The API supports basic CRUD operations for employees and dependents, and calculates the paycheck based on various rules.
+This project is an API for managing employees and their dependents, and for calculating their monthly paycheck. The API supports basic GET operations for employees and dependents, a Post operation for creating new employees with dependents and a GET operation that calculates the paycheck based on various rules.
 
 ### Features
 
-Create, read, update, and delete employees and their dependents.
+Create, read, employees and their dependents based on restrictions.
 Calculate the monthly paycheck for an employee based on:
 A base cost for employees.
 Additional costs for dependents.
@@ -16,9 +16,8 @@ Additional charges for dependents over a certain age.
 
 **ASP.NET Core 6.0**: Web framework for building the API.
 **Entity Framework Core**: ORM for database interactions.
-**SQLite**: Database for storing employee and dependent data.
+**EF In Memory DB**: Database for storing employee and dependent data.
 **xUnit**: Testing framework for unit and integration tests.
-**FluentAssertions**: Library for more readable assertions in tests.
 
 ## Getting Started
 
@@ -50,17 +49,23 @@ the project respectively.
 
 ```
 PaylocityBenefitsCalculator
+API
 │
 ├── Controllers
 │   └── EmployeesController.cs
+|   └── DependentsController.cs
+|   └── PaychecksController.cs
 │
 ├── Models
 │   └── Employee.cs
 │   └── Dependent.cs
 │   └── Relationship.cs
+|   └── Paycheck.cs
+│   └── ApiResponse.cs
+│   └── ValidateDependents.cs
+│   └── ModelBuilderExtension.cs
 │
 ├── DTOs
-│   └── CreateEmployeeDto.cs
 │   └── GetDependentDto.cs
 │   └── GetEmployeeDto.cs
 │   └── GetPaycheckDto.cs
@@ -71,14 +76,36 @@ PaylocityBenefitsCalculator
 │   └── PaycheckService.cs
 │
 ├── Data
-│   └── ApplicationDbContext.cs
+│   └── CompanyContext.cs
 │
-├── Migrations
 │
 ├── Program.cs
 │
-├── Startup.cs
 │
-└── Tests
-    └── EmployeeApiTests.cs
+ApiTests
+├── IntegrationTests
+|   └── EmployeeIntegrationTests.cs
+|   └── DependentIntegrationTests.cs
+|   └── PaymentIntegrationTests.cs
+├── UnitTests
+|   └── PaycheckCalculatorTest.cs
+├── IntegrationTest.cs
+├── ShouldExtension.cs
 ```
+
+### Testing
+
+To Test the application - the api needs to be running so the endpoints are active and can be tested for functionality.
+
+```console
+dotnet build
+dotnet run
+```
+
+Once the app is running, use the built in fixtures for testing via the ApiTests project. 
+
+The tests check for functionality of endpoints and unit tests for individual method functionality where necessary. 
+
+
+
+
