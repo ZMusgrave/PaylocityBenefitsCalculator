@@ -10,7 +10,7 @@ public class GetPaycheckDto
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
 
-    public decimal Salary { get; set; }
+    public decimal Gross { get; set; }
 
     public decimal Net { get; set; }
     
