@@ -3,6 +3,8 @@
 ## Project Overview
 This project is an API for managing employees and their dependents, and for calculating their monthly paycheck. The API supports basic GET operations for employees and dependents, a Post operation for creating new employees with dependents and a GET operation that calculates the paycheck based on various rules.
 
+This project makes a swagger endpoint available with the above methods listed for use. 
+
 ### Features
 
 Create, read, employees and their dependents based on restrictions.
@@ -18,6 +20,7 @@ Additional charges for dependents over a certain age.
 **Entity Framework Core**: ORM for database interactions.
 **EF In Memory DB**: Database for storing employee and dependent data.
 **xUnit**: Testing framework for unit and integration tests.
+**Swagger**: API documentation, design and testing for endpoints
 
 ## Getting Started
 
