@@ -83,34 +83,44 @@ public class EmployeesController : ControllerBase
     [HttpGet("")]
     public async Task<ActionResult<ApiResponse<List<GetEmployeeDto>>>> GetAll()
     {
-
-        IQueryable<Employee> employeeData = _context.Employees.Include(e => e.Dependents);
-        
-        var employees = await employeeData.Select(e => new GetEmployeeDto
+        try
         {
-            Id = e.Id,
-            FirstName = e.FirstName,
-            LastName = e.LastName,
-            Salary = e.Salary,
-            DateOfBirth = e.DateOfBirth,
-            Dependents = e.Dependents.Select(d => new GetDependentDto
+            IQueryable<Employee> employeeData = _context.Employees.Include(e => e.Dependents);
+
+            var employees = await employeeData.Select(e => new GetEmployeeDto
             {
-                Id = d.Id,
-                FirstName = d.FirstName,
-                LastName = d.LastName,
-                DateOfBirth = d.DateOfBirth,
-                Relationship = d.Relationship
-            }).ToList()
-        }).ToListAsync();
-        
-      
-        var result = new ApiResponse<List<GetEmployeeDto>>
-        {
-            Data = employees,
-            Success = true
-        };
+                Id = e.Id,
+                FirstName = e.FirstName,
+                LastName = e.LastName,
+                Salary = e.Salary,
+                DateOfBirth = e.DateOfBirth,
+                Dependents = e.Dependents.Select(d => new GetDependentDto
+                {
+                    Id = d.Id,
+                    FirstName = d.FirstName,
+                    LastName = d.LastName,
+                    DateOfBirth = d.DateOfBirth,
+                    Relationship = d.Relationship
+                }).ToList()
+            }).ToListAsync();
 
-        return result;
+
+            var result = new ApiResponse<List<GetEmployeeDto>>
+            {
+                Data = employees,
+                Success = true
+            };
+
+            return result;
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new ApiResponse<GetDependentDto>
+            {
+                Success = false,
+                Error = ex.Message
+            });
+        }
     }
     
     [SwaggerOperation(Summary = "Create a new employee")]

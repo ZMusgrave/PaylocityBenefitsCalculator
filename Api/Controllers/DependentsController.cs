@@ -60,7 +60,6 @@ public class DependentsController : ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError, new ApiResponse<GetDependentDto>
             {
                 Success = false,
-                //TODO come back to this spot and verify that this actually is useful
                 Error = ex.Message
             });
         }
@@ -75,7 +74,7 @@ public class DependentsController : ControllerBase
         {
             IQueryable<Dependent> dependentData = _context.Dependents;
 
-            var dependents = dependentData.Select(d => new GetDependentDto()
+            var dependents = await dependentData.Select(d => new GetDependentDto()
             {
                 Id = d.Id,
                 FirstName = d.FirstName,
@@ -83,10 +82,10 @@ public class DependentsController : ControllerBase
                 DateOfBirth = d.DateOfBirth,
                 Relationship = d.Relationship
             }).ToListAsync();
-            //TODO verify using await inside of this object cant be done in a better way
+           
             var result = new ApiResponse<List<GetDependentDto>>
             {
-                Data = await dependents,
+                Data = dependents,
                 Success = true
             };
 
@@ -97,7 +96,6 @@ public class DependentsController : ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError, new ApiResponse<List<GetDependentDto>>
             {
                 Success = false,
-                //TODO come back to this spot and verify that this actually is useful
                 Error = ex.Message
             });
         }
