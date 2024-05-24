@@ -16,11 +16,11 @@ Additional charges for dependents over a certain age.
 
 ### Technologies Used
 
-**ASP.NET Core 6.0**: Web framework for building the API.
-**Entity Framework Core**: ORM for database interactions.
-**EF In Memory DB**: Database for storing employee and dependent data.
-**xUnit**: Testing framework for unit and integration tests.
-**Swagger**: API documentation, design and testing for endpoints
+**ASP.NET Core 6.0**: Web framework for building the API.  
+**Entity Framework Core**: ORM for database interactions.  
+**EF In Memory DB**: Database for storing employee and dependent data.  
+**xUnit**: Testing framework for unit and integration tests.  
+**Swagger**: API documentation, design and testing for endpoints.  
 
 ## Getting Started
 
