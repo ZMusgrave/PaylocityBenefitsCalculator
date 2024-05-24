@@ -13,7 +13,7 @@ public class PayCheckService : IPayCheckCalculator
     private const decimal OlderDependentAgeCutoff = 50;
     private const decimal OlderDependentAdditionalCostPerMonth = 200;
 
-    public decimal CalculatePaycheck(Employee employee)
+    public Paycheck CalculatePaycheck(Employee employee)
     {
         decimal annualBaseBenefitsCost = BaseBenefitsCostPerMonth * 12;
         decimal annualDependentBenefitsCost = CalculateDependentBenefitsCost(employee.Dependents.ToList());
@@ -24,11 +24,20 @@ public class PayCheckService : IPayCheckCalculator
                                            annualHighEarnerBenefitsCost + annualOlderDependentBenefitsCost;
 
         decimal perPaycheckBenefitsCost = totalAnnualBenefitsCost / PaychecksPerYear;
-        decimal perPaycheckSalary = employee.Salary / PaychecksPerYear;
+        decimal perPayCheckGross = employee.Salary / PaychecksPerYear;
 
-        decimal paycheckAmount = perPaycheckSalary - perPaycheckBenefitsCost;
+        decimal net = perPayCheckGross - perPaycheckBenefitsCost;
 
-        return paycheckAmount;
+        var payCheck = new Paycheck
+        {
+            Id = Guid.NewGuid().ToString(),
+            EmployeeId = employee.Id,
+            Gross = perPayCheckGross,
+            BenefitsCost = perPaycheckBenefitsCost,
+            Net = net
+        };
+            
+        return payCheck;
     }
 
     private decimal CalculateDependentBenefitsCost(List<Dependent> dependents)
