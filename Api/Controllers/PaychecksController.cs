@@ -45,20 +45,9 @@ public class PaychecksController : ControllerBase
            
             var paycheck = _payCheckCalculator.CalculatePaycheck(employee);
             
-            var paycheckDto = new GetPaycheckDto()
-            {
-                Id = paycheck.Id,
-                EmployeeId = paycheck.EmployeeId,
-                FirstName = employee.FirstName,
-                LastName = employee.LastName,
-                Gross = paycheck.Gross,
-                BenefitsCost = paycheck.BenefitsCost,
-                Net = paycheck.Net
-            };
-            
             var result = new ApiResponse<GetPaycheckDto>
             {
-                Data = paycheckDto,
+                Data = paycheck,
                 Success = true
             };
 
