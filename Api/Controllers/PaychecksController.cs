@@ -59,7 +59,6 @@ public class PaychecksController : ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError, new ApiResponse<GetDependentDto>
             {
                 Success = false,
-                //TODO come back to this spot and verify that this actually is useful
                 Error = ex.Message
             });
         }
