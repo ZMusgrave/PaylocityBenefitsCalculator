@@ -73,7 +73,6 @@ public class EmployeesController : ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError, new ApiResponse<GetDependentDto>
             {
                 Success = false,
-                //TODO come back to this spot and verify that this actually is useful
                 Error = ex.Message
             });
         }
@@ -85,7 +84,6 @@ public class EmployeesController : ControllerBase
     public async Task<ActionResult<ApiResponse<List<GetEmployeeDto>>>> GetAll()
     {
         
-        // https://learn.microsoft.com/en-us/aspnet/web-api/overview/data/using-web-api-with-entity-framework/part-5
         IQueryable<Employee> employeeData = _context.Employees;
         
         var employees = employeeData.Select(e => new GetEmployeeDto
@@ -164,7 +162,6 @@ public class EmployeesController : ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError, new ApiResponse<GetDependentDto>
             {
                 Success = false,
-                //TODO come back to this spot and verify that this actually is useful
                 Error = ex.Message
             });
         }
