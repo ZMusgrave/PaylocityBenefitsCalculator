@@ -83,10 +83,10 @@ public class EmployeesController : ControllerBase
     [HttpGet("")]
     public async Task<ActionResult<ApiResponse<List<GetEmployeeDto>>>> GetAll()
     {
+
+        IQueryable<Employee> employeeData = _context.Employees.Include(e => e.Dependents);
         
-        IQueryable<Employee> employeeData = _context.Employees;
-        
-        var employees = employeeData.Select(e => new GetEmployeeDto
+        var employees = await employeeData.Select(e => new GetEmployeeDto
         {
             Id = e.Id,
             FirstName = e.FirstName,
@@ -101,7 +101,7 @@ public class EmployeesController : ControllerBase
                 DateOfBirth = d.DateOfBirth,
                 Relationship = d.Relationship
             }).ToList()
-        }).ToList();
+        }).ToListAsync();
         
       
         var result = new ApiResponse<List<GetEmployeeDto>>
