@@ -1,3 +1,4 @@
+using Api.Dtos.Finance.Paycheck;
 using Api.Models;
 using Api.Services.Interfaces;
 
@@ -13,24 +14,26 @@ public class PayCheckService : IPayCheckCalculator
     private const decimal OlderDependentAgeCutoff = 50;
     private const decimal OlderDependentAdditionalCostPerMonth = 200;
 
-    public Paycheck CalculatePaycheck(Employee employee)
+    public GetPaycheckDto CalculatePaycheck(Employee employee)
     {
         decimal annualBaseBenefitsCost = BaseBenefitsCostPerMonth * 12;
-        decimal annualDependentBenefitsCost = CalculateDependentBenefitsCost(employee.Dependents.ToList());
-        decimal annualHighEarnerBenefitsCost = CalculateHighEarnerBenefitsCost(employee.Salary);
-        decimal annualOlderDependentBenefitsCost = CalculateOlderDependentBenefitsCost(employee.Dependents.ToList());
+        decimal annualDependentBenefitsCost = CalculateAnnualDependentBenefitsCost(employee.Dependents.ToList());
+        decimal annualHighEarnerBenefitsCost = CalculateAnnualHighEarnerBenefitsCost(employee.Salary);
+        decimal annualOlderDependentBenefitsCost = CalculateAnnualOlderDependentBenefitsCost(employee.Dependents.ToList());
 
         decimal totalAnnualBenefitsCost = annualBaseBenefitsCost + annualDependentBenefitsCost +
                                            annualHighEarnerBenefitsCost + annualOlderDependentBenefitsCost;
 
-        decimal perPaycheckBenefitsCost = totalAnnualBenefitsCost / PaychecksPerYear;
-        decimal perPayCheckGross = employee.Salary / PaychecksPerYear;
+        decimal perPaycheckBenefitsCost =
+            Math.Round(totalAnnualBenefitsCost / PaychecksPerYear, 2, MidpointRounding.ToEven);
+        decimal perPayCheckGross = Math.Round(employee.Salary / PaychecksPerYear, 2, MidpointRounding.ToEven);
+        decimal net = Math.Round(perPayCheckGross - perPaycheckBenefitsCost, 2, MidpointRounding.ToEven);
 
-        decimal net = perPayCheckGross - perPaycheckBenefitsCost;
-
-        var payCheck = new Paycheck
+        var payCheck = new GetPaycheckDto()
         {
-            Id = Guid.NewGuid().ToString(),
+            Id = "1",
+            FirstName = employee.FirstName,
+            LastName = employee.LastName,
             EmployeeId = employee.Id,
             Gross = perPayCheckGross,
             BenefitsCost = perPaycheckBenefitsCost,
@@ -40,13 +43,13 @@ public class PayCheckService : IPayCheckCalculator
         return payCheck;
     }
 
-    private decimal CalculateDependentBenefitsCost(List<Dependent> dependents)
+    private decimal CalculateAnnualDependentBenefitsCost(List<Dependent> dependents)
     {
         int dependentCount = dependents.Count;
         return dependentCount * DependentBenefitsCostPerMonth * 12;
     }
 
-    private decimal CalculateHighEarnerBenefitsCost(decimal salary)
+    private decimal CalculateAnnualHighEarnerBenefitsCost(decimal salary)
     {
         if (salary > HighEarnerSalaryThreshold)
         {
@@ -55,7 +58,7 @@ public class PayCheckService : IPayCheckCalculator
         return 0;
     }
 
-    private decimal CalculateOlderDependentBenefitsCost(List<Dependent> dependents)
+    private decimal CalculateAnnualOlderDependentBenefitsCost(List<Dependent> dependents)
     {
         int olderDependentCount = dependents.Count(d => CalculateAge(d.DateOfBirth) > OlderDependentAgeCutoff);
         return olderDependentCount * OlderDependentAdditionalCostPerMonth * 12;
