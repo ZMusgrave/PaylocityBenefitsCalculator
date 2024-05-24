@@ -16,6 +16,6 @@ public class CompanyContext : DbContext
             modelBuilder.Seed();
         }
 
-        public DbSet<Dependent> Dependents { get; set; }
-        public DbSet<Employee> Employees { get; set; }
+        public DbSet<Dependent> Dependents { get; set; } = null!;
+        public DbSet<Employee> Employees { get; set; } = null!;
 }
