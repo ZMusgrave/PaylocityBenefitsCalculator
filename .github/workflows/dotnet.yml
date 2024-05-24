@@ -24,9 +24,12 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-    - name: Run
+    - name: Start API in background
       run: |
-            nohup dotnet run --project Api
+        nohup dotnet run --project Api &
+    - name: Wait for API to start
+      run: |
+        sleep 10
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Kill App
