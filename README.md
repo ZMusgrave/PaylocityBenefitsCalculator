@@ -48,6 +48,12 @@ dotnet run
 These commands will install any needed dependencies, build the project, and run
 the project respectively.
 
+#### You may need to provide a dev cert to the application, in that case run the following.
+
+```console
+dotnet dev-certs https --trust
+```
+
 ### Project Structure
 
 ```
