@@ -43,16 +43,17 @@ public class PaychecksController : ControllerBase
                 });
             }
            
-            var paycheckAmount = _payCheckCalculator.CalculatePaycheck(employee);
+            var paycheck = _payCheckCalculator.CalculatePaycheck(employee);
             
             var paycheckDto = new GetPaycheckDto()
             {
-                Id = Guid.NewGuid().ToString(),
-                EmployeeId = employee.Id,
+                Id = paycheck.Id,
+                EmployeeId = paycheck.EmployeeId,
                 FirstName = employee.FirstName,
                 LastName = employee.LastName,
-                Salary = employee.Salary,
-                Net = paycheckAmount
+                Gross = paycheck.Gross,
+                BenefitsCost = paycheck.BenefitsCost,
+                Net = paycheck.Net
             };
             
             var result = new ApiResponse<GetPaycheckDto>
