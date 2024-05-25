@@ -34,15 +34,15 @@ A code editor like Visual Studio || Rider || Visual Studio Code
 Clone the repository:
 
 ```bash
-git clone https://github.com/ZMusgrave/PaylocityBenefitsCalculator.git
-cd employee-paycheck-api
+git clone https://github.com/ZMusgrave/PaylocityCodingChallenge.git
+cd PaylocityCodingChallenge
 ```
 
 ### Run the application
 
 ```console
 dotnet build
-dotnet run
+dotnet run --project
 ```
 
 These commands will install any needed dependencies, build the project, and run
