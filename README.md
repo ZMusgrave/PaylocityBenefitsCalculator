@@ -42,7 +42,7 @@ cd employee-paycheck-api
 
 ```console
 dotnet build
-dotnet run
+dotnet run --project Api
 ```
 
 These commands will install any needed dependencies, build the project, and run
